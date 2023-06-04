@@ -1,0 +1,29 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-items: center;
+}
+.button {
+    background-color: black;
+    border: black;
+    opacity: 1;
+    width: 100%;
+    animation: ButtonAnimate 5s infinite;
+    transition: all 0.2s;
+}
+.button:hover {
+    background-color: rgba(36, 36, 11, 0.322);
+}
+
+@keyframes ButtonAnimate {
+    0% {
+        box-shadow: 1px 1px 10px blue;
+    }
+    50% {
+        box-shadow: 1px 1px 10px rgb(243, 243, 243);
+    }
+    100% {
+        box-shadow: 1px 1px 10px rgb(36, 100, 173);
+    }
+}
