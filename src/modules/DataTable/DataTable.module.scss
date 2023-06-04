@@ -1,0 +1,12 @@
+.head,
+.body tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+.body {
+    display: block;
+    height: 600px;
+    overflow: auto;
+    overflow-x: hidden;
+}
