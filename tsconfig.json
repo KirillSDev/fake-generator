@@ -17,7 +17,12 @@
         "isolatedModules": true,
         "jsx": "react-jsx",
         "incremental": true,
-        "noImplicitThis": true
+        "noImplicitThis": true,
+        "paths": {
+            "@context": ["src/Context.tsx"],
+            "@utils/*": ["src/utils/*"],
+            "@interfaces/*": ["src/interfaces/*"]
+        }
     },
     "include": ["src/**/*.tsx", "src/**/*.ts", "./declaration.d.ts"],
     "exclude": ["node_modules"]
