@@ -1,5 +1,5 @@
 # fake-generator
-https://fake-generator-one.vercel.app/
+https://fake-generator-flame.vercel.app/
 ## Description
 
 
