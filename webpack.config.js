@@ -29,7 +29,9 @@ module.exports = {
         alias: {
             '@context': path.resolve(__dirname, 'src/Context.tsx'),
             '@utils': path.resolve(__dirname, 'src/utils'),
-            '@interfaces': path.resolve(__dirname, 'src/interfaces')
+            '@interfaces': path.resolve(__dirname, 'src/interfaces'),
+            '@workers': path.resolve(__dirname, 'src/workers'),
+            '@hooks': path.resolve(__dirname, 'src/hooks')
         },
         extensions: ['.tsx', '.ts', '.json', '.js'],
     },

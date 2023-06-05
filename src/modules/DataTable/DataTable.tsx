@@ -1,13 +1,16 @@
-import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useContext, useEffect, useRef } from 'react';
 import { Table } from 'react-bootstrap';
 import styles from './DataTable.module.scss';
 import { TableRow } from './components/TableRow';
 import { GlobalContext, FormContextType } from '@context';
 import cn from 'classnames';
-import { createFakerByLocate } from '../../utils/createFaker';
+import { createFakerByLocate } from '@utils/createFaker';
 import { generateData } from '@utils/generateData';
 import { IData } from '@interfaces/data';
-import { generateError } from '@utils/generateError';
+import { debounce } from 'lodash';
+import { useScrollHandler } from '@hooks/useScrollHandler';
+
+const worker = new Worker(new URL('@workers/updateDataWithErrors.worker.ts', import.meta.url));
 
 export const DataTable: FC = (): JSX.Element => {
     const { locale, seed, errors, data, setData, setDataWithErrors, dataWithErrors } = useContext(
@@ -17,38 +20,38 @@ export const DataTable: FC = (): JSX.Element => {
     const myFaker = createFakerByLocate(locale);
     myFaker.seed(seed);
 
-    const handleScroll = () => {
+    const handleScroll = useCallback(() => {
         const height = ref.current?.scrollHeight! - ref.current?.scrollTop!;
-        if (height == ref.current?.offsetHeight) {
+        if (height <= ref.current?.offsetHeight! + 1) {
             generateData(seed, myFaker, setData, setDataWithErrors, 10);
         }
-    };
-    const updateDataWithErrors = () => {
-        const updatedData = data.map((item: IData) => {
-            const obj = { ...item };
-            obj.fullName = generateError(myFaker, obj.fullName, errors, locale);
-            obj.address = generateError(myFaker, obj.address, errors, locale);
-            obj.phone = generateError(myFaker, obj.phone, errors, locale);
-            return obj;
-        });
-        setDataWithErrors(updatedData);
-    };
+    }, [seed, myFaker, setData, setDataWithErrors]);
+    const debouncedHandleScroll = useRef(debounce(handleScroll, 300));
+
+    useScrollHandler(ref, debouncedHandleScroll.current);
+
     useEffect(() => {
         generateData(seed, myFaker, setData, setDataWithErrors, 20);
     }, [seed, locale]);
 
     useEffect(() => {
-        ref.current?.addEventListener('scroll', handleScroll);
-        return () => {
-            ref.current?.removeEventListener('scroll', handleScroll);
-        };
-    });
+        worker.postMessage({ data, errors, locale, seed });
+    }, [errors, data]);
 
     useEffect(() => {
-        if (errors) {
-            updateDataWithErrors();
-        }
-    }, [errors, seed, locale, data.length]);
+        worker.onmessage = (event) => {
+            const { updatedData } = event.data;
+            setDataWithErrors(updatedData);
+        };
+    }, [generateData]);
+
+    useEffect(() => {
+        return () => {
+            worker.onmessage = null;
+            worker.terminate();
+        };
+    }, [worker]);
+
     return (
         <Table className={styles.table}>
             <thead className={styles.head}>
@@ -60,10 +63,10 @@ export const DataTable: FC = (): JSX.Element => {
                     <th className='col-6'>Phone</th>
                 </tr>
             </thead>
-            <tbody ref={ref} className={cn(styles.body)}>
+            <tbody id='table' ref={ref} className={cn(styles.body)}>
                 {dataWithErrors.map((note: IData, idx) => (
                     <TableRow
-                        key={note.id}
+                        key={note.id + idx}
                         number={idx + 1}
                         id={note.id}
                         phone={note.phone}

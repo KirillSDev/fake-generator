@@ -17,7 +17,7 @@ export const generateError = (faker: Faker, value: string, errors: number, local
         const randomIndexByLocale = random.int(0, alphabet.length - 1);
         const permutationIndex = random.int(0, value.length - 1);
         const letter = alphabet[randomIndexByLocale];
-        console.log(letter);
+
         if (value.length < 40) {
             switch (type) {
                 case 'delete':

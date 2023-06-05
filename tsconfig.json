@@ -21,10 +21,12 @@
         "paths": {
             "@context": ["src/Context.tsx"],
             "@utils/*": ["src/utils/*"],
-            "@interfaces/*": ["src/interfaces/*"]
+            "@interfaces/*": ["src/interfaces/*"],
+            "@workers/*": ["src/workers/*"],
+            "@hooks/*": ["src/hooks/*"]
         }
     },
-    "include": ["src/**/*.tsx", "src/**/*.ts", "./declaration.d.ts"],
+    "include": ["src/**/*.tsx", "src/**/*.ts", "./declaration.d.ts", "src/workers/test.worker.ts"],
     "exclude": ["node_modules"]
 
 }
