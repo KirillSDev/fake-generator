@@ -11,7 +11,7 @@ export const CountrySelectionForm: FC = (): JSX.Element => {
     return (
         <Form.Group>
             <Form.Label>Choose country</Form.Label>
-            <Form.Select onChange={changeCountry} defaultValue={'USA'}>
+            <Form.Select onChange={changeCountry} defaultValue={'NORWAY'}>
                 <option>NORWAY</option>
                 <option>FRANCE</option>
                 <option>GEORGIA</option>

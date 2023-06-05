@@ -49,7 +49,7 @@ export const DataTable: FC = (): JSX.Element => {
             const { updatedData } = event.data;
             setDataWithErrors(updatedData);
         };
-    }, [generateData]);
+    }, [setDataWithErrors]);
 
     useEffect(() => {
         return () => {

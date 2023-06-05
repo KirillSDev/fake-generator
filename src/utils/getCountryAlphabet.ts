@@ -3,12 +3,15 @@ export const getCountryAlphabet = (locale: string): string => {
     const frenchAlphabet = 'abcdefghijklmnopqrstuvwxyzàâçéèêëîïôœùûüÿ';
     const norwegianAlphabet = 'abcdefghijklmnopqrstuvwxyzæøå';
     const countryAlphabet = () => {
-        if (locale === 'GEORGIA') {
-            return georgianAlphabet;
-        } else if (locale === 'NORWAY') {
-            return norwegianAlphabet;
-        } else {
-            return frenchAlphabet;
+        switch (locale) {
+            case 'GEORGIA':
+                return georgianAlphabet;
+            case 'NORWAY':
+                return norwegianAlphabet;
+            case 'FRANCE':
+                return frenchAlphabet;
+            default:
+                return 'abcdefghijklmnopqrstuvwxyz';
         }
     };
     return countryAlphabet();

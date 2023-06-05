@@ -3,13 +3,12 @@ import { createFakerByLocate } from '@utils/createFaker';
 import { generateError } from '@utils/generateError';
 
 self.onmessage = (event) => {
-    const { data, errors, locale } = event.data;
-    const myFaker = createFakerByLocate(locale);
+    const { data, errors, locale, seed } = event.data;
     const updatedData = data.map((item: IData) => {
         const obj = { ...item };
-        obj.fullName = generateError(myFaker, obj.fullName, errors, locale);
-        obj.address = generateError(myFaker, obj.address, errors, locale);
-        obj.phone = generateError(myFaker, obj.phone, errors, locale);
+        obj.fullName = generateError(obj.fullName, errors, seed, locale);
+        obj.address = generateError(obj.address, errors, seed, locale);
+        obj.phone = generateError(obj.phone, errors, seed, locale);
         return obj;
     });
 
