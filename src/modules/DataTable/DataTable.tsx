@@ -20,15 +20,21 @@ export const DataTable: FC = (): JSX.Element => {
     const myFaker = createFakerByLocate(locale);
     myFaker.seed(seed);
 
-    const handleScroll = useCallback(() => {
+    const handleScroll = () => {
         const height = ref.current?.scrollHeight! - ref.current?.scrollTop!;
         if (height <= ref.current?.offsetHeight! + 1) {
             generateData(seed, myFaker, setData, setDataWithErrors, 10);
         }
-    }, [seed, myFaker, setData, setDataWithErrors]);
-    const debouncedHandleScroll = useRef(debounce(handleScroll, 300));
+    };
 
-    useScrollHandler(ref, debouncedHandleScroll.current);
+    const debouncedHandleScroll = debounce(handleScroll, 200);
+
+    useEffect(() => {
+        ref.current?.addEventListener('scroll', debouncedHandleScroll);
+        return () => {
+            ref.current?.removeEventListener('scroll', debouncedHandleScroll);
+        };
+    });
 
     useEffect(() => {
         generateData(seed, myFaker, setData, setDataWithErrors, 20);
